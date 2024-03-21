@@ -28,13 +28,13 @@ def generate_article(request: HttpRequest):
 async def get_current_market_state(request: HttpRequest):
     global last_api_call_time, cached_rate
 
-    if time.time() - last_api_call_time < 10 and cached_rate:
-        return JsonResponse({"rate": cached_rate})
-
-    elif request.method == "GET":
+    if request.method == "GET":
         return JsonResponse({"message": "Endpoint only accepts POST requests"})
 
     elif request.method == "POST":
+        if time.time() - last_api_call_time < 10 and cached_rate:
+            return JsonResponse({"rate": cached_rate})
+
         data = json.loads(request.body)
         from_currency = data.get("from_currency")
         to_currency = data.get("to_currency")
