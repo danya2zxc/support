@@ -21,9 +21,8 @@ def get_issues(request: HttpRequest) -> JsonResponse:
         {
             "id": issue.id,  # type: ignore
             "title": issue.title,
-            "body": issue.body,
-            "senior_id": issue.senior_id,
-            "junior_id": issue.junior_id,
+            "senior_id": issue.senior,
+            "junior_id": issue.junior,
         }
         for issue in issues
     ]
@@ -48,9 +47,8 @@ def create_random_issue(request: HttpRequest) -> JsonResponse:
     result = {
         "id": issue.id,  # type: ignore
         "title": issue.title,
-        "body": issue.body,
-        "senior_id": issue.senior_id,
-        "junior_id": issue.junior_id,
+        "senior_id": issue.senior,
+        "junior_id": issue.junior,
     }
 
     return JsonResponse(data=result)
@@ -71,9 +69,8 @@ def create_new_issue(request: HttpRequest) -> JsonResponse:
     result = {
         "id": issue.id,  # type: ignore
         "title": issue.title,
-        "body": issue.body,
-        "senior_id": issue.senior_id,
-        "junior_id": issue.junior_id,
+        "senior_id": issue.senior,
+        "junior_id": issue.junior,
     }
 
     return JsonResponse(data=result)
