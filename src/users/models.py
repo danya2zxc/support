@@ -1,11 +1,48 @@
-from typing import Any
-
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.utils import timezone
+
+from .managers import UserManager
+
+# class User(models.Model):
+#     password: Any = models.CharField(max_length=100)
 
 
-class User(models.Model):
-    email: Any = models.CharField(max_length=30)
-    first_name: Any = models.CharField(max_length=50)
-    last_name: Any = models.CharField(max_length=50)
-    password: Any = models.CharField(max_length=100)
-    role: Any = models.CharField(max_length=20)
+class User(AbstractBaseUser, PermissionsMixin):  # type: ignore
+    email: models.CharField = models.CharField(max_length=30, unique=True)
+    first_name: models.CharField = models.CharField(max_length=50)
+    last_name: models.CharField = models.CharField(max_length=50)
+
+    is_staff: models.BooleanField = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    role: models.CharField = models.CharField(max_length=20)
+
+    date_joined: models.DateTimeField = models.DateTimeField(
+        default=timezone.now
+    )
+
+    objects = UserManager()
+
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    def get_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+
+        return f"{self.first_name} {self.last_name}".strip()
+
+    def get_short_name(self):
+        """Return the short name for the user."""
+
+        return self.first_name
+
+    def __str__(self) -> str:
+        if self.first_name and self.last_name:
+            return self.get_full_name()
+        else:
+            return self.email

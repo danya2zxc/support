@@ -1,20 +1,19 @@
-from typing import Any
-
 from django.db import models
 
 from users.models import User
 
 
 class Issue(models.Model):
-    title: Any = models.CharField(max_length=100)
-    status: Any = models.PositiveSmallIntegerField()
-
-    junior: Any = models.ForeignKey(
+    title: models.CharField = models.CharField(max_length=100)
+    status: models.PositiveSmallIntegerField = (
+        models.PositiveSmallIntegerField()
+    )
+    junior: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="junior_issues",
     )
-    senior: Any = models.ForeignKey(
+    senior: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="senior_issues",
@@ -35,11 +34,13 @@ class Issue(models.Model):
 
 
 class Message(models.Model):
-    body: Any = models.TextField()
-    timestamp: Any = models.DateTimeField(auto_now_add=True)
+    body: models.TextField = models.TextField()
+    timestamp: models.DateTimeField = models.DateTimeField(auto_now_add=True)
 
-    user: Any = models.ForeignKey(User, on_delete=models.CASCADE)
-    issue: Any = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    user: models.ForeignKey = models.ForeignKey(User, on_delete=models.CASCADE)
+    issue: models.ForeignKey = models.ForeignKey(
+        Issue, on_delete=models.CASCADE
+    )
 
     # update on any update in the column
     # updated_at = models.DateTimeField(auto_now=True)

@@ -11,7 +11,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: pip install black ruff isort mypy pydantic[mypy] httpx django django-stubs
+        run: pip install black ruff isort mypy pydantic[mypy] httpx django django-stubs djangorestframework-simplejwt
       - name: Run formatters
         run: python -m black --check . && python -m isort --check .
       - name: Run linter
