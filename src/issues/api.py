@@ -1,76 +1,45 @@
-import json
-import random
-import string
+from rest_framework import generics, serializers
 
-from django.http import HttpRequest, JsonResponse
+from users.enums import Role
 
-from issues.models import Issue
+from .enums import Status
+from .models import Issue
 
-
-def get_issues(request: HttpRequest) -> JsonResponse:
-    if request.method != "GET":
-        raise Exception("Only GET method is allowed")
-
-    # issues = Issue.objects.create()
-    # issues = Issue.objects.update()
-    # issues = Issue.objects.get()
-    # issues = Issue.objects.delete()
-    issues: list[Issue] = Issue.objects.all()  # type: ignore
-
-    results: list[dict] = [
-        {
-            "id": issue.id,  # type: ignore
-            "title": issue.title,
-            "senior_id": issue.senior,
-            "junior_id": issue.junior,
-        }
-        for issue in issues
-    ]
-
-    return JsonResponse(data={"results": results})
+# class IssueSerializer(serializer.ModelSerializer)
 
 
-def _random_string(length: int = 10) -> str:
-    return "".join(
-        [random.choice(string.ascii_letters) for i in range(length)]
-    )
+class IssueSerializer(serializers.ModelSerializer):
+    status = serializers.IntegerField(required=False)
+    junior = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Issue
+        # fields = ["id","title", "body","junior_id"]
+        # exlude = ["id"]
+        fields = "__all__"
+
+    def validate(self, attrs):
+
+        attrs["status"] = Status.OPENED
+
+        return attrs
 
 
-def create_random_issue(request: HttpRequest) -> JsonResponse:
-    issue = Issue.objects.create(
-        title=_random_string(20),
-        body=_random_string(30),
-        senior_id=1,
-        junior_id=2,
-    )
+class IssueAPI(generics.ListCreateAPIView):
+    http_method_names = ["get", "post"]
+    serializer_class = IssueSerializer
 
-    result = {
-        "id": issue.id,  # type: ignore
-        "title": issue.title,
-        "senior_id": issue.senior,
-        "junior_id": issue.junior,
-    }
+    def get_queryset(self):
+        return Issue.objects.all()
 
-    return JsonResponse(data=result)
+    def post(self, request):
+        if request.user.role == Role.SENIOR:
+            raise Exception("The role is Senior")
+        return super().post(request)
 
 
-def create_new_issue(request: HttpRequest) -> JsonResponse:
-    if request.method != "POST":
-        raise Exception("Only POST method is allowed")
-    data_ = json.loads(request.body)
-
-    issue = Issue.objects.create(
-        title=data_.get("title"),
-        body=data_.get("body"),
-        senior_id=1,
-        junior_id=2,
-    )
-
-    result = {
-        "id": issue.id,  # type: ignore
-        "title": issue.title,
-        "senior_id": issue.senior,
-        "junior_id": issue.junior,
-    }
-
-    return JsonResponse(data=result)
+class IssueRetrieveUpdateDeleteAPI(generics.RetrieveUpdateDestroyAPIView):
+    http_method_names = ["get", "put", "patch", "delete"]
+    serializer_class = IssueSerializer
+    queryset = Issue.objects.all()
+    lookup_url_kwarg = "id"

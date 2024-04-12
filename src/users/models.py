@@ -17,7 +17,7 @@ class User(AbstractBaseUser, PermissionsMixin):  # type: ignore
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    role: models.CharField = models.CharField(max_length=20)
+    role: models.CharField = models.CharField(max_length=15)
 
     date_joined: models.DateTimeField = models.DateTimeField(
         default=timezone.now
