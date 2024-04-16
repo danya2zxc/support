@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 
+from .enums import Role
 from .managers import UserManager
 
 # class User(models.Model):
@@ -9,15 +10,23 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):  # type: ignore
-    email: models.CharField = models.CharField(max_length=30, unique=True)
-    first_name: models.CharField = models.CharField(max_length=50)
-    last_name: models.CharField = models.CharField(max_length=50)
+    email: models.CharField = models.CharField(
+        max_length=30,
+        unique=True,
+        blank=False,
+    )
+    first_name: models.CharField = models.CharField(max_length=5, blank=True)
+    last_name: models.CharField = models.CharField(max_length=50, blank=True)
 
     is_staff: models.BooleanField = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    role: models.CharField = models.CharField(max_length=15)
+    role: models.CharField = models.CharField(
+        max_length=15,
+        default=Role.JUNIOR,
+        choices=Role.choices(),
+    )
 
     date_joined: models.DateTimeField = models.DateTimeField(
         default=timezone.now
@@ -46,3 +55,6 @@ class User(AbstractBaseUser, PermissionsMixin):  # type: ignore
             return self.get_full_name()
         else:
             return self.email
+
+    class Meta:
+        ordering = ["id"]

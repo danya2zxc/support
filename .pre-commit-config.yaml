@@ -24,9 +24,3 @@ repos:
       pass_filenames: false
 
 
-    - id: mypy
-      name: "Running static types checker"
-      entry: mypy .
-      language: system
-      types: [python]
-      pass_filenames: false

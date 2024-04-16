@@ -2,13 +2,13 @@ from django.db import models
 
 from users.models import User
 
+ISSUE_STATUS_CHOICES = ((1, "Opened"), (2, "In progress"), (3, "Closed"))
+
 
 class Issue(models.Model):
-    title: models.CharField = models.CharField(max_length=100)
-    body: models.TextField = models.TextField(null=True)
-    status: models.PositiveSmallIntegerField = (
-        models.PositiveSmallIntegerField()
-    )
+    title = models.CharField(max_length=100)
+    body = models.TextField(null=True, blank=True)
+    status = models.PositiveSmallIntegerField(choices=ISSUE_STATUS_CHOICES)
     junior: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -19,10 +19,18 @@ class Issue(models.Model):
         on_delete=models.CASCADE,
         related_name="senior_issues",
         null=True,
+        blank=True,
     )
 
     def __repr__(self) -> str:
         return f"Issue[{self.pk} {self.title[:10]}]"
+
+    def __str__(self) -> str:
+        return self.title[:20]
+
+    class Meta:
+        verbose_name = "Issue"
+        ordering = ["id"]
 
 
 # first_issue: Issue | None = Issue.objects.first()
@@ -41,7 +49,10 @@ class Message(models.Model):
     user: models.ForeignKey = models.ForeignKey(User, on_delete=models.CASCADE)
     issue: models.ForeignKey = models.ForeignKey(
         Issue, on_delete=models.CASCADE
-    )
+    )  # noqa
 
     # update on any update in the column
     # updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["id"]

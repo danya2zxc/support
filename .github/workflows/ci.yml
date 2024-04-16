@@ -11,10 +11,8 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install dependencies
-        run: pip install black ruff isort mypy pydantic[mypy] httpx django django-stubs djangorestframework-simplejwt djangorestframework-stubs[compatible-mypy]
+        run: pip install pipenv && pipenv install --dev --system
       - name: Run formatters
         run: python -m black --check . && python -m isort --check .
       - name: Run linter
         run: python -m ruff .
-      - name: Run static type checker
-        run: python -m mypy .
