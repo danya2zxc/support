@@ -18,12 +18,10 @@ class Role(StrEnum):
         return [cls.SENIOR.value, cls.JUNIOR.value]
 
     @classmethod
-    @lru_cache(maxsize=1)
     def users_staff(cls):
         return [cls.SENIOR, cls.ADMIN]
 
     @classmethod
-    @lru_cache(maxsize=1)
     def staff_values(cls):
         return [cls.SENIOR.value, cls.ADMIN.value]
 

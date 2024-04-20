@@ -181,27 +181,27 @@ filterwarnings = ['ignore::RuntimeWarning', 'ignore::UserWarning']
 [tool.coverage.run]
 omit = ["*/conftest.py", "*/test_*.py", "*/migrations/"]
 
-[tool.mypy]
-plugins = ["pydantic.mypy", "django-stubs"]
-python_version = '3.11'
-files = ['*.py']
-warn_redundant_casts = true
-warn_unused_ignores = true
-show_error_codes = true
-namespace_packages = true
-exclude = ["migrations"]
-follow_imports = 'silent'
+# [tool.mypy]
+# plugins = ["pydantic.mypy", "django-stubs"]
+# python_version = '3.11'
+# files = ['*.py']
+# warn_redundant_casts = true
+# warn_unused_ignores = true
+# show_error_codes = true
+# namespace_packages = true
+# exclude = ["migrations"]
+# follow_imports = 'silent'
 
-
-# [tool.mypy.plugins.django-stubs]
-# django_settings_module = "config.settings"
 
 # Silint "type import errors" as our 3rd-party libs does not have types
 # Check: https://mypy.readthedocs.io/en/latest/config_file.html#import-discovery
 
 
 [tool.pyright]
-include = ["*/src/."]
+# include = ["*/src", "C:/Users/Administrator/.virtualenvs/support-_lx5IueZ/Lib/site-packages/",]
 exclude = ["**/__pycache__", "**/venv/*", "**/migrations/*"]
-typeCheckingMode = "strict"                                  # off, basic, strict
+typeCheckingMode = "basic"                                   # off, basic, strict
+# pythonPath = "C:\\Users\\Administrator\\.virtualenvs\\support-_lx5IueZ\\Scripts\\python.exe"
+# extraPaths = ["Users/Administrator/Desktop/python/support","Users/Administrator/Desktop/python/support/src",""]
 useLibraryCodeForTypes = true
+# pythonPath = "/Users/Administrator/.virtualenvs/support-_lx5IueZ/Scripts/"

@@ -11,13 +11,14 @@ djangorestframework = "~=3.15.0"
 psycopg = "==3.1.18"
 psycopg2 = "*"
 djangorestframework-simplejwt = {version="~=5.3.1", extra=["crypto"]}
-pyright = "*"
+
 
 [dev-packages]
 django-stubs = "~=4.2.7"
 black = "~=24.3.0"
 isort = "~=5.13.2"
 ruff = "~=0.3.3"
+pyright = "*"
 
 [requires]
 python_version = "3.11"
