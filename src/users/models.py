@@ -20,7 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin):  # type: ignore
 
     is_staff: models.BooleanField = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     role: models.CharField = models.CharField(
         max_length=15,
@@ -58,3 +58,13 @@ class User(AbstractBaseUser, PermissionsMixin):  # type: ignore
 
     class Meta:
         ordering = ["id"]
+
+
+class ActivationKey(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        related_name="activation_key",
+        on_delete=models.CASCADE,
+    )
+    key = models.UUIDField(editable=False)

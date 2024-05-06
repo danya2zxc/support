@@ -9,7 +9,12 @@ from issues.api import (
     issues_take,
     messages_api_dispatcher,
 )
-from users.api import UserAPI, UserRetrieveUpdateDeleteAPI
+from users.api import (
+    UserAPI,
+    UserRetrieveUpdateDeleteAPI,
+    activate_mail,
+    resend_activation_mail,
+)
 
 urlpatterns = [
     # admin
@@ -17,6 +22,8 @@ urlpatterns = [
     # users
     path("users/", UserAPI.as_view()),
     path("users/<int:id>", UserRetrieveUpdateDeleteAPI.as_view()),
+    path("users/activate", activate_mail),
+    path("users/activation/resendActivation", resend_activation_mail),
     # issues
     path("issues/", IssueAPI.as_view()),
     path("issues/<int:id>", IssueRetrieveUpdateDeleteAPI.as_view()),

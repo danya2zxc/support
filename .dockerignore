@@ -1,0 +1,14 @@
+.git/
+.gitignore
+.pre-commit-config.yamlddd
+./github
+./idea
+.vscode/
+.ruff_cache/
+docs/
+exaples/
+scripts/
+docker-compose.yml
+Dockerfile
+README.md
+__pycache__/
