@@ -1,11 +1,21 @@
 import uuid
+from dataclasses import dataclass
 
-from .models import ActivationKey, User
+from shared.cache import CacheService
+
+from .enums import ActivationType
+from .models import User
 from .tasks import send_activation_mail, send_succes_validate_mail
 
 
+@dataclass
+class ActivatiorUserMeta:
+    user_id: int
+
+
 class Activator:
-    def __init__(self, email: str) -> None:
+
+    def __init__(self, email: str | None = None) -> None:
         self.email = email
 
     def create_activation_key(self):
@@ -28,15 +38,32 @@ class Activator:
         internal_user_id: int,
         activation_key: uuid.UUID,
     ):
-        ActivationKey.objects.create(
-            user_id=internal_user_id,
-            key=activation_key,
+
+        cache = CacheService()
+        payload = {"user_id": internal_user_id}
+        cache.save(
+            namespace="activation",
+            key=str(activation_key),
+            instance=payload,
+            ttl=2_000,
         )
 
-    def validate_activation(self, user: User, activation: ActivationKey):
+    def validate_activation(self, activation_key: str):
+        cache = CacheService()
 
-        user.is_active = True
-        user.save()
-        activation.delete()
+        record = cache.get(namespace="activation", key=activation_key)
 
-        send_succes_validate_mail.delay(recipient=self.email)
+        if record is None:
+            return ActivationType.KEY_NOT_FOUND_OR_TTL_EXPIRED
+
+        else:
+            instance = ActivatiorUserMeta(**record)
+            user = User.objects.get(id=instance.user_id)
+            user.is_active = True
+            user.save()
+            self.email = user.email
+            cache.delete(namespace="activation", key=str(activation_key))
+
+            send_succes_validate_mail.delay(recipient=user.email)
+
+            return ActivationType.SUCCESS

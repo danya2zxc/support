@@ -5,7 +5,7 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from .enums import Role
-from .models import ActivationKey, User
+from .models import User
 from .services import Activator
 
 
@@ -92,32 +92,27 @@ class UserAPI(generics.ListCreateAPIView):
 @permission_classes([permissions.AllowAny])
 def activate_mail(request) -> Response:
     activation_key = request.data.get("activation_key")
-    email = request.data.get("email")
-    user = User.objects.get(email=email)
-    activator_service = Activator(email=email)
 
-    if user.is_active is True:
-        return Response(
-            {"message": "User is already activated"},
-            status=200,
-        )
+    activator_service = Activator()
 
-    try:
-        activation = ActivationKey.objects.get(key=activation_key)
-    except ActivationKey.DoesNotExist:
-        return Response(
-            {"message": "Activation key does not exist"},
-            status=404,
-        )
+    validate_status = activator_service.validate_activation(
+        activation_key=str(activation_key)
+    )
 
-    else:
-        activator_service.validate_activation(
-            user,
-            activation=activation,
-        )
+    if validate_status == "success":
         return Response(
             {"message": "Email activated successfully"},
             status=200,
+        )
+    elif validate_status == "key_not_found_or_ttl_expired":
+        return Response(
+            {"message": "Activation key does not exist or TTL is > 1 day"},
+            status=404,
+        )
+    else:
+        return Response(
+            {"message": "Invalid activation key"},
+            status=400,
         )
 
 

@@ -36,3 +36,8 @@ class Role(StrEnum):
             )
             results.append(_element)
         return results
+
+
+class ActivationType(StrEnum):
+    SUCCESS = auto()
+    KEY_NOT_FOUND_OR_TTL_EXPIRED = auto()

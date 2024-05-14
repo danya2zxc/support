@@ -8,7 +8,7 @@ RUN apt-get update -y \
     && pip install --upgrade setuptools \
     && apt-get install -y build-essential \ 
     # install dependencies manager
-    && pip install pipenv \
+    && pip install pipenv watchdog \
     # cleaning up unused files
     && rm -rf /var/lib/apt/lists/*
 
@@ -16,7 +16,8 @@ RUN apt-get update -y \
 
 # install project dependencies
 COPY ./Pipfile ./Pipfile.lock /
-RUN pipenv sync --dev --system
+RUN pipenv sync --system
+
 
 # cd /app (get or create)
 WORKDIR /app
@@ -25,6 +26,6 @@ COPY ./ ./
 EXPOSE 8000
 
 # RUN python src/manage.py runserver
-CMD sleep 2 && python src/manage.py runserver 127.0.0.1:8000
-# ENTRYPOINT [ "python" ]
-# CMD ["src/manage.py", "runserver"]
+# CMD sleep 2 && python src/manage.py runserver 127.0.0.1:8000
+ENTRYPOINT [ "python" ]
+CMD ["src/manage.py", "runserver", "0.0.0.0:8000"]

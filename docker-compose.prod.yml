@@ -1,35 +1,28 @@
 
 
 services:
-  
-  cache:
-    image: 'redis:latest'
-    container_name: support_cache
-    ports:
-      - '6380:6379'
-
   broker:
     image: 'redis:latest'
     container_name: support_broker
-    ports:
-      - '6379:6379'
+
+  cache:
+    image: 'redis:latest'
+    container_name: support_cache
 
   mailing:
     image: mailhog/mailhog:latest
     container_name: support_mailing
     env_file: ".env"
     ports:
-      - "1025:1025"
-      - "8025:8025"
+    - "8025:8025"
+
   database:
     image: 'postgres:16'
     container_name: support_database
-    ports:
-      - '5432:5432'
     env_file: '.env'
     volumes:
       - "pg_data:/var/lib/postgresql/data"
-  
+
   api: &app
     build: 
       context: .
@@ -37,7 +30,7 @@ services:
     image: support
     container_name: support_api
     ports:
-      - '8000:8000'
+      - "8000:8000"
     env_file: '.env'
     depends_on:
       - database
@@ -53,5 +46,7 @@ services:
     ports: []
     entrypoint: bash
     command: -c "watchmedo auto-restart --pattern='*.py' --recursive -- celery -A config worker -l INFO -P solo"
+
+
 volumes:
   pg_data: {}
