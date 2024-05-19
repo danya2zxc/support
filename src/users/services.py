@@ -49,9 +49,7 @@ class Activator:
         )
 
     def validate_activation(self, activation_key: str):
-        cache = CacheService()
-
-        record = cache.get(namespace="activation", key=activation_key)
+        record = CacheService().get(namespace="activation", key=activation_key)
 
         if record is None:
             return ActivationType.KEY_NOT_FOUND_OR_TTL_EXPIRED
@@ -62,7 +60,6 @@ class Activator:
             user.is_active = True
             user.save()
             self.email = user.email
-            cache.delete(namespace="activation", key=str(activation_key))
 
             send_succes_validate_mail.delay(recipient=user.email)
 

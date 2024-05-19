@@ -12,6 +12,8 @@ httpx = "~=0.27.0"
 psycopg2-binary = "*"
 redis = {version ="~=5.0", extras=["hiredis"]}
 requests = "~=2.0.0"
+drf-yasg = "~=1.21"
+
 
 [dev-packages]
 black = "~=24.3.0"

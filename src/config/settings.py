@@ -47,6 +47,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_yasg",
 ]
 
 LOCAL_APPS = [
@@ -57,6 +58,11 @@ LOCAL_APPS = [
 
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+SWAGGER_SETTINGS = {
+    "DEFAULT_GENERATOR_CLASS": "drf_yasg.generators.OpenAPISchemaGenerator",
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

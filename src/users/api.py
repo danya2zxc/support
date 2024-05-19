@@ -102,17 +102,17 @@ def activate_mail(request) -> Response:
     if validate_status == "success":
         return Response(
             {"message": "Email activated successfully"},
-            status=200,
+            status=status.HTTP_200_OK,
         )
     elif validate_status == "key_not_found_or_ttl_expired":
         return Response(
             {"message": "Activation key does not exist or TTL is > 1 day"},
-            status=404,
+            status=status.HTTP_404_NOT_FOUND,
         )
     else:
         return Response(
             {"message": "Invalid activation key"},
-            status=400,
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
@@ -124,7 +124,7 @@ def resend_activation_mail(request) -> Response:
     if user.is_active is True:
         return Response(
             {"message": "User is already activated"},
-            status=200,
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     activator_service = Activator(email=email)
@@ -135,7 +135,7 @@ def resend_activation_mail(request) -> Response:
     )
     return Response(
         {"message": "Activation mail resend on your email"},
-        status=200,
+        status=status.HTTP_200_OK,
     )
 
 
