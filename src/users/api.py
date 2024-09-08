@@ -141,7 +141,7 @@ def resend_activation_mail(request) -> Response:
 
 class UserRetrieveUpdateDeleteAPI(generics.RetrieveUpdateDestroyAPIView):
     http_method_names = ["put", "delete", "get"]
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAdminUser]
     serializer_class = UserSerializer
     queryset = User.objects.all()
     lookup_url_kwarg = "id"

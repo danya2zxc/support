@@ -13,7 +13,7 @@ psycopg2-binary = "*"
 redis = {version ="~=5.0", extras=["hiredis"]}
 requests = "~=2.0.0"
 drf-yasg = "~=1.21"
-
+gunicorn = "==22.0.0"
 
 [dev-packages]
 black = "~=24.3.0"
@@ -21,6 +21,7 @@ django-stubs = "~=4.2.7"
 isort = "~=5.13.2"
 pyright = "*"
 ruff = "~=0.3.3"
+pytest-django = "~=4.8.0"
 
 [requires]
 python_version = "3.11"

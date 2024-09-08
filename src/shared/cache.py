@@ -25,8 +25,7 @@ class CacheService:
         result: str = self.connection.get(self._build_key(namespace, str(key)))
         if result is None:
             return None
-        else:
-            return json.loads(result)
+        return json.loads(result)
 
     def delete(self, namespace: str, key: Any) -> None:
         self.connection.delete(self._build_key(namespace, str(key)))

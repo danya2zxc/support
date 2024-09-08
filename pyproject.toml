@@ -171,12 +171,15 @@ skip = '.venv,venv,env'
 src_paths = ["src"]
 
 [tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = 'config.settings'
+pythonpath = '..'
+
 addopts = '-s -v --cache-clear'
 asyncio_mode = 'auto'
 cache_dir = '/tmp'
 python_files = 'tests.py test_*.py *_test.py'
 python_functions = 'test_* *_test'
-filterwarnings = ['ignore::RuntimeWarning', 'ignore::UserWarning']
+filterwarnings = ['ignore::RuntimeWarning', 'ignore::UserWarning', 'ignore:DeprecationWarning',]
 
 [tool.coverage.run]
 omit = ["*/conftest.py", "*/test_*.py", "*/migrations/"]
@@ -198,10 +201,9 @@ omit = ["*/conftest.py", "*/test_*.py", "*/migrations/"]
 
 
 [tool.pyright]
-# include = ["*/src", "C:/Users/Administrator/.virtualenvs/support-_lx5IueZ/Lib/site-packages/",]
 exclude = ["**/__pycache__", "**/venv/*", "**/migrations/*"]
 typeCheckingMode = "basic"                                   # off, basic, strict
-# pythonPath = "C:\\Users\\Administrator\\.virtualenvs\\support-_lx5IueZ\\Scripts\\python.exe"
-# extraPaths = ["Users/Administrator/Desktop/python/support","Users/Administrator/Desktop/python/support/src",""]
 useLibraryCodeForTypes = true
-# pythonPath = "/Users/Administrator/.virtualenvs/support-_lx5IueZ/Scripts/"
+
+
+

@@ -3,7 +3,7 @@ from django.urls import path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from rest_framework_simplejwt.views import token_obtain_pair
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from issues.api import (
     IssueAPI,
@@ -50,7 +50,7 @@ urlpatterns = [
     # messages
     path("issues/<int:issue_id>/messages", messages_api_dispatcher),
     # Authentication
-    path("auth/token/", token_obtain_pair),
+    path("auth/token/", TokenObtainPairView.as_view()),
     path(
         "swagger<format>/",
         schema_view.without_ui(cache_timeout=0),
